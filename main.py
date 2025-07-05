@@ -57,13 +57,28 @@ if not "initialized" in st.session_state:
 # 4. 初期表示
 ############################################################
 # タイトル表示
-cn.display_app_title()
+#cn.display_app_title()
 
 # モード表示
-cn.display_select_mode()
+#cn.display_select_mode()
+
+
+# サイドバーに表示
+with st.sidebar:
+    st.markdown("**利用目的**")
+    cn.display_select_mode()         # 利用目的ラジオボタン
+    st.divider() 
+    cn.display_initial_ai_message()  # 説明・入力例
+
+# タイトル表示
+cn.display_app_title()
+with st.chat_message("assistant"):
+    st.success("こんにちは。私は社内文書の情報をもとに回答する生成AIチャットボットです。上記で利用目的を選択し、画面下部のチャット欄からメッセージを送信してください。")
+    # 黄色の三角マーク付きの警告メッセージ
+    st.warning("⚠️ 具体的に入力したほうが精度高めの回答を得やすいです。")
 
 # AIメッセージの初期表示
-cn.display_initial_ai_message()
+#cn.display_initial_ai_message()
 
 
 ############################################################
