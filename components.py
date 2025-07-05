@@ -129,6 +129,14 @@ def display_conversation_log():
                             icon = utils.get_source_icon(file_info)
                             st.info(file_info, icon=icon)
 
+def format_path_with_page(path, page_number=None):
+    """
+    ファイルパスとページ番号を結合して表示用の文字列を返す
+    PDFファイルの場合のみページ番号を付与
+    """
+    if page_number is not None and path.endswith(".pdf"):
+        return f"{path}（ページNo.{page_number + 1}）"
+    return path
 
 def display_search_llm_response(llm_response):
     """
@@ -160,10 +168,12 @@ def display_search_llm_response(llm_response):
             # ページ番号を取得
             main_page_number = llm_response["context"][0].metadata["page"]
             # 「メインドキュメントのファイルパス」と「ページ番号」を表示
-            st.success(f"{main_file_path}", icon=icon)
+            #st.success(f"{main_file_path}", icon=icon)
+            st.success(format_path_with_page(main_file_path, main_page_number), icon=icon)
         else:
             # 「メインドキュメントのファイルパス」を表示
-            st.success(f"{main_file_path}", icon=icon)
+            #st.success(f"{main_file_path}", icon=icon)
+            st.success(format_path_with_page(main_file_path), icon=icon)
 
         # ==========================================
         # ユーザー入力値と関連性が高いサブドキュメントのありかを表示
@@ -216,10 +226,12 @@ def display_search_llm_response(llm_response):
                 # ページ番号が取得できない場合のための分岐処理
                 if "page_number" in sub_choice:
                     # 「サブドキュメントのファイルパス」と「ページ番号」を表示
-                    st.info(f"{sub_choice['source']}", icon=icon)
+                    #st.info(f"{sub_choice['source']}", icon=icon)
+                    st.info(format_path_with_page(sub_choice['source'], sub_choice['page_number']), icon=icon)
                 else:
                     # 「サブドキュメントのファイルパス」を表示
-                    st.info(f"{sub_choice['source']}", icon=icon)
+                    #st.info(f"{sub_choice['source']}", icon=icon)
+                    st.info(format_path_with_page(sub_choice['source']), icon=icon)
         
         # 表示用の会話ログに格納するためのデータを用意
         # - 「mode」: モード（「社内文書検索」or「社内問い合わせ」）
@@ -296,10 +308,12 @@ def display_contact_llm_response(llm_response):
                 # ページ番号を取得
                 page_number = document.metadata["page"]
                 # 「ファイルパス」と「ページ番号」
-                file_info = f"{file_path}"
+                #file_info = f"{file_path}"
+                file_info = format_path_with_page(file_path, page_number)
             else:
                 # 「ファイルパス」のみ
-                file_info = f"{file_path}"
+                #file_info = f"{file_path}"
+                file_info = format_path_with_page(file_path)
 
             # 参照元のありかに応じて、適したアイコンを取得
             icon = utils.get_source_icon(file_path)
